@@ -132,3 +132,6 @@ dmypy.json
 dtconfig.py
 tbconfig.py
 .idea/
+
+# cards
+/cards

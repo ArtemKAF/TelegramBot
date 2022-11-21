@@ -13,19 +13,29 @@ HELP_COMMAND = '''
 
 
 @dp.message_handler(commands=['help'])
-async def help_command(message: types.message):
+async def help_command(message: types.Message):
     await message.answer(text=HELP_COMMAND)
     await message.delete()
 
+
 @dp.message_handler(commands=['description'])
-async def help_command(message: types.message):
+async def help_command(message: types.Message):
     await message.answer(text='Здесь будет описание моей миссии ;)')
     await message.delete()
 
+
 @dp.message_handler(commands=['start'])
-async def help_command(message: types.message):
-    await message.answer(text=f'Здравствуйте, {message.text}! '
-                               'Предлагаю Вам начать игру.')
+async def help_command(message: types.Message):
+    await bot.send_message(
+        chat_id=message.chat.id,
+        text=f'Привет, {message.from_user.first_name}! Предлагаю поиграть.',
+        parse_mode='HTML',
+    )
+    await bot.send_photo(
+        chat_id=message.chat.id,
+        photo='https://kids-flashcards.com/images/ru/1/large/picture-flashcard/%D0%BA%D0%BE%D1%82.jpg',
+        caption='Как это называется на английском?',
+    )
     await message.delete()
 
 
@@ -35,4 +45,4 @@ async def echo(message: types.message):
 
 
 if __name__ == '__main__':
-    executor.start_polling(dp)
+    executor.start_polling(dp, skip_updates=True)
