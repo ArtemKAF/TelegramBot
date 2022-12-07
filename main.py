@@ -1,22 +1,14 @@
+import os
 from aiogram import Bot, Dispatcher, executor, types
-import requests as requests
-from tbconfig import TOKEN_API
+from tbconfig import TOKEN_API, HELP_COMMAND
 
 
-URL = 'https://api.telegram.org/bot'
 bot = Bot(TOKEN_API)
 dp = Dispatcher(bot)
 
-HELP_COMMAND = '''
-/help - список команд
-/description - просмотреть описание бота
-/start - начало работы с ботом
-'''
 
-
-def send_photo_file(chat_id, img):
-    files = {'photo': open(img, 'rb')}
-    requests.post(f'{URL}{TOKEN_API}/sendPhoto?chat_id={chat_id}', files=files)
+file_list = os.listdir('./cards')
+print(file_list)
 
 
 @dp.message_handler(commands=['help'])
@@ -37,11 +29,8 @@ async def start_command(message: types.Message):
         chat_id=message.chat.id,
         text=f'Привет, {message.from_user.first_name}! Предлагаю поиграть.',
     )
-    send_photo_file(message.chat.id, './cards/animals/cat.jpg')
-    await bot.send_message(
-        message.chat.id,
-        text='Как это называется на английском?'
-    )
+    photo = types.InputFile(path_or_bytesio='./cards/animals/cat.jpg')
+    await bot.send_photo(message.chat.id, photo=photo, caption="Как это называется на английском?")
     await message.delete()
 
 
